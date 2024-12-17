@@ -25,4 +25,29 @@ class Solution:
         return recurString(len(text1)-1,len(text2)-1)
 
 
-        
+        # Tabulation
+        n = len(text1)
+        m = len(text2)
+
+        for i in range(n+1):
+            dp[i][0] = 0
+
+
+        for j in range(m+1):
+            dp[0][j] = 0
+
+        for i in range(n+1):
+            for j in range(m+1):
+
+                if text1[n-1]==text2[m-1]:
+                    dp[n][m] = 1+ dp[n-1][m-1]
+
+                else:
+                    dp[n][m] = max(dp[n-1][m],dp[indText1][indText2-1])
+
+        return dp[n][m]
+
+
+
+
+            
