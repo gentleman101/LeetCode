@@ -16,14 +16,18 @@ class Solution:
         # return utilRob(n-1)
 
         n = len(nums)
-        dp = [0 for _ in range(n)]
-        dp[0]=nums[0]
+        prev=nums[0]
+        prev2=0
         
         for i in range(1,n):
-            notTake = dp[i-1]
-            if i>0:
-                Take = nums[i] + dp[i-2]
-            dp[i] = max(Take,notTake)
-        return dp[n-1]
+            notTake = prev
+
+            Take = nums[i]
+            if i>1:
+                Take +=  prev2
+            curr = max(Take,notTake)
+            prev2 = prev
+            prev = curr
+        return prev
 
         
