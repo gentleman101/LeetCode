@@ -1,27 +1,26 @@
 class Solution:
     def coinChange(self, coins: List[int], amount: int) -> int:
         n = len(coins)
-        dp = [[-1 for _ in range(amount+1)] for _ in range(n)]
-        def utilChange(i, total):
-            # Base case: If the total is 0, no coins are needed
-            if total == 0:
-                return 0
-            # Base case: If no coins are left and the amount is not 0, return a large value (infeasible)
-            if i < 0:
-                return float('inf')
+        dp = [[float('inf')] * (amount + 1) for _ in range(n)]
 
-            if dp[i][total] !=-1:
-                return dp[i][total]
-            # Do not take the current coin
-            notTake = utilChange(i - 1, total)
-            # Take the current coin if it doesn't exceed the total
-            Take = float('inf')
-            if coins[i] <= total:
-                Take = 1 + utilChange(i, total - coins[i])
+        # Initialize for 0 total
+        for i in range(n):
+            dp[i][0] = 0
 
-            dp[i][total] = min(notTake, Take)
-            return dp[i][total]
+        # Initialize for the first row
+        for total in range(amount + 1):
+            if total % coins[0] == 0:
+                dp[0][total] = total // coins[0]
 
-        result = utilChange(n - 1, amount)
-        # If result is still a large value, it means the amount cannot be made up
+        # Fill the DP table
+        for i in range(1, n):
+            for total in range(amount + 1):
+                notTake = dp[i - 1][total]
+                Take = float('inf')
+                if coins[i] <= total:
+                    Take = 1 + dp[i][total - coins[i]]
+                dp[i][total] = min(notTake, Take)
+
+        # Final answer
+        result = dp[n - 1][amount]
         return result if result != float('inf') else -1
