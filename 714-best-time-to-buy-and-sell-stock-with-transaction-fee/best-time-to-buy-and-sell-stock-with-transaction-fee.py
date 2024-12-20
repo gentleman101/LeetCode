@@ -2,23 +2,19 @@ class Solution:
     def maxProfit(self, prices: List[int], fee: int) -> int:
 
         n = len(prices)
-        dp = [[-1 for _ in range(2)] for _ in range(len(prices))]
-        def utilProfit(i,buyFlag):
-            if i==n:
-                return 0
-            if dp[i][buyFlag]!=-1:
-                return dp[i][buyFlag]
+        dp = [[0 for _ in range(2)] for _ in range(len(prices)+1)]
 
 
-            if buyFlag:
 
-                profit = max(utilProfit(i+1,True),-prices[i]+utilProfit(i+1,False))
 
-            else:
+        for i in range(n-1,-1,-1):
+            for buyFlag in [0,1]:
+                if buyFlag:
+                    profit = max(dp[i+1][True],-prices[i]+dp[i+1][False])
 
-                profit = max(utilProfit(i+1,False),prices[i]-fee+utilProfit(i+1,True))
-            dp[i][buyFlag] = profit
-            return dp[i][buyFlag]
+                else:
 
-        return utilProfit(0,True)
+                    profit = max(dp[i+1][False],prices[i]-fee+dp[i+1][True])
+                dp[i][buyFlag] = profit
+        return dp[0][1]
         
