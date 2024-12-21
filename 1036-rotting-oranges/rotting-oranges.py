@@ -1,37 +1,44 @@
-from collections import deque
-from typing import List
-
 class Solution:
     def orangesRotting(self, grid: List[List[int]]) -> int:
-        rows, columns = len(grid), len(grid[0])
+
         q = deque()
-        fresh_count = 0
+        n = len(grid)
+        m = len(grid[0])
+        visited = [[False for _ in range(m)] for _ in range(n)]
+        count_fresh_oranges = 0
 
-        # Initialize the queue with all initially rotten oranges
-        for row in range(rows):
-            for col in range(columns):
-                if grid[row][col] == 2:
-                    q.append((row, col, 0))  # (row, col, time)
-                elif grid[row][col] == 1:
-                    fresh_count += 1
+        for i in range(n):
+            for j in range(m):
+                if grid[i][j]==2:
+                    q.append((i,j,0))
+                if grid[i][j]==1:
+                    count_fresh_oranges+=1
 
-        # Directions for 4 possible movements
-        movements = [(1, 0), (0, 1), (-1, 0), (0, -1)]
+        # Movements
+        movements = [(1,0),(0,1),(-1,0),(0,-1)]
         max_time = 0
-
-        # Perform BFS
         while q:
-            row, col, time = q.popleft()
-            max_time = max(max_time, time)
+            row,col,time = q.popleft()
+            max_time = max(max_time,time)
 
-            for move in movements:
-                nrow, ncol = row + move[0], col + move[1]
+            for moves in movements:
+                nrow = row + moves[0]
+                ncol = col + moves[1]
 
-                # If the neighboring cell is a fresh orange, rot it and add to the queue
-                if 0 <= nrow < rows and 0 <= ncol < columns and grid[nrow][ncol] == 1:
-                    grid[nrow][ncol] = 2  # Mark as rotten
-                    fresh_count -= 1  # Decrease fresh orange count
-                    q.append((nrow, ncol, time + 1))
+                if 0<=nrow<n and 0<=ncol<m and grid[nrow][ncol]==1 and not visited[nrow][ncol]:
+                    q.append((nrow,ncol,time+1))
+                    count_fresh_oranges-=1
+                    visited[nrow][ncol] = True
 
-        # If there are any fresh oranges left, return -1
-        return max_time if fresh_count == 0 else -1
+
+        if count_fresh_oranges==0:
+            return max_time
+
+        else:
+            return -1
+
+
+
+
+            
+        
