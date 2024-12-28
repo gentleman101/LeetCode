@@ -1,23 +1,24 @@
 class Solution:
     def maxProfit(self, k: int, prices: List[int]) -> int:
         n = len(prices)
-        ahead = [[0] * (k + 1) for _ in range(2)]
-        cur = [[0] * (k + 1) for _ in range(2)]
-    
-        for ind in range(n - 1, -1, -1):
-            for buy in range(2):
-                for cap in range(1, k + 1):
+        dp = [[[-1 for _ in range(k+1)] for _ in range(2)] for _ in range(n)]
+        def utilProfit(i,buy,trans):
+            if i==n or trans==0:
+                return 0
 
-                    if buy == 0:  # We can buy the stock
-                        cur[buy][cap] = max(0 + ahead[0][cap],
-                                        -prices[ind] + ahead[1][cap])
+            profit = 0
+            
+            if dp[i][buy][trans]!=-1:
+                return dp[i][buy][trans]
 
-                    if buy == 1:  # We can sell the stock
-                        cur[buy][cap] = max(0 + ahead[1][cap],
-                                        prices[ind] + ahead[0][cap - 1])
+            if buy:
+                profit =max(utilProfit(i+1,buy,trans),-prices[i]+utilProfit(i+1,False,trans))
 
-            # Update the 'ahead' array with the current state
-            ahead = cur.copy()
+            if not buy:
+                profit = max(utilProfit(i+1,buy,trans),prices[i] + utilProfit(i+1,True,trans-1))
 
-        return ahead[0][k]
-        
+            dp[i][buy][trans] = profit 
+
+            return dp[i][buy][trans]
+
+        return utilProfit(0,True,k)
