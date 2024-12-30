@@ -1,10 +1,19 @@
-# Time Complexity : O(n)
 class Solution(object):
     def isIsomorphic(self, s, t):
-        map1 = []
-        map2 = []
-        for idx in s:
-            map1.append(s.index(idx))
-        for idx in t:
-            map2.append(t.index(idx))
-        return map1 == map2
+        if len(s) != len(t):
+            return False
+
+        map_s_to_t = {}
+        map_t_to_s = {}
+
+        for char_s, char_t in zip(s, t):
+            # Check if mappings are consistent
+            if (char_s in map_s_to_t and map_s_to_t[char_s] != char_t) or \
+               (char_t in map_t_to_s and map_t_to_s[char_t] != char_s):
+                return False
+            
+            # Add mappings
+            map_s_to_t[char_s] = char_t
+            map_t_to_s[char_t] = char_s
+
+        return True
