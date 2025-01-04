@@ -1,23 +1,37 @@
 class Solution:
     def minimumEffortPath(self, heights: List[List[int]]) -> int:
-        rows, cols = len(heights), len(heights[0])
-        directions = [(0, 1), (0, -1), (1, 0), (-1, 0)]
-        dist = [[math.inf for _ in range(cols)] for _ in range(rows)]
-        dist[0][0] = 0
-        minHeap = [(0, 0, 0)] 
-        
-        while minHeap:
-            effort, x, y = heappop(minHeap)
+        n = len(heights)
+        m = len(heights[0])
 
-            if x == rows - 1 and y == cols - 1:
-                return effort
-            
-            for dx, dy in directions:
-                nx, ny = x + dx, y + dy
-                
-                if 0 <= nx < rows and 0 <= ny < cols:
-                    new_effort = max(effort, abs(heights[x][y] - heights[nx][ny]))
+        pq = []
+        mad = -1
+        movements = [(1,0),(0,1),(-1,0),(0,-1)]
+        dist = [[float(inf) for _ in range(m)] for _ in range(n)]
+
+
+        heappush(pq,(0,0,0))
+        dist[0][0] = heights[0][0]
+        max_effort = 0
+        while pq:
+            energy,row,col = heappop(pq)
+            if row == n - 1 and col == m - 1:
+                return energy
+            for move in movements:
+                nrow = row + move[0]
+                ncol = col + move[1]
+
+                if 0<=nrow<n and 0<=ncol<m:
+                    effort = abs(heights[nrow][ncol]-heights[row][col])
+                    max_effort = max(energy,effort)
+                    if max_effort<dist[nrow][ncol]:
+                        dist[nrow][ncol] = effort
+                        heappush(pq,(max_effort,nrow,ncol))
+
+        return dist[n-1][m-1]
                     
-                    if new_effort < dist[nx][ny]:
-                        dist[nx][ny] = new_effort
-                        heappush(minHeap, (new_effort, nx, ny))
+
+
+
+        
+
+
