@@ -1,29 +1,31 @@
 class Solution:
     def findCircleNum(self, isConnected: List[List[int]]) -> int:
-
-        connected = collections.defaultdict(list)
-        count = 0
-
-        for row in range(len(isConnected)):
-            for col in range(len(isConnected[0])):
-                if (isConnected[row][col]==1) & (row!=col):
-                    connected[row].append(col)
-                    connected[col].append(row)
-
-
-        visit = [False]*len(isConnected)
+        n = len(isConnected)
+        m = len(isConnected[0])
+        adj = defaultdict(list)
+        visited = [False]*n
+        cnt  = 0
+        for r in range(n):
+            for c in range(m):
+                if r!=c and isConnected[r][c]==1:
+                    adj[r].append(c)
+                    adj[c].append(r)
 
 
-        def dfs(v):
-            visit[v]= True
-            for i in connected[v]:
-                if not visit[i]:
-                    dfs(i)
-
-        for i in range(len(isConnected)):
-            if not visit[i]:
-                count+=1
-                dfs(i)
+        def dfs(city):
+            visited[city]=True
             
-        return count
+            for neighbour in adj[city]:
+                if not visited[neighbour]:
+                    dfs(neighbour)
+
+        for province in range(n):
+            if not visited[province]:
+                cnt+=1
+                dfs(province)
+
+        return cnt
+
+
+
         
