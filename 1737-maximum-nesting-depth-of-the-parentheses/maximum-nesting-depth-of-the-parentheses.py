@@ -8,7 +8,7 @@ class Solution:
                 openCounter-=1
             elif char=='(':
                 openCounter+=1
-                maxCounter = max(maxCounter,openCounter)
+            maxCounter = max(maxCounter,openCounter)
                 
 
         return maxCounter
