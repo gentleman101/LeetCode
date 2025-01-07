@@ -1,7 +1,6 @@
 class Solution:
     def smallestDivisor(self, nums: List[int], threshold: int) -> int:
         l,r = 1,max(nums)
-        ans = max(nums)
         def divisorUtil(n):
             divSum = 0
 
@@ -15,7 +14,6 @@ class Solution:
             mid = (l+r)//2
             div = divisorUtil(mid)
             if div<=threshold:
-                ans = mid
                 r = mid-1
 
             else:
