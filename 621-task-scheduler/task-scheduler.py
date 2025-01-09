@@ -17,4 +17,3 @@ class Solution:
                 heappush(maxHeap,q.popleft()[0])
 
         return time
-
