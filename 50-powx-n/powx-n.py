@@ -1,17 +1,13 @@
 class Solution:
     def myPow(self, x: float, n: int) -> float:
+        res = 1
+        power = abs(n)
+        current = x
 
-        def recur(i):
-            if i == 0:
-                return 1
-            half = recur(i // 2)
-            if i % 2 == 0:
-                return half * half
-            else:
-                return half * half * x
+        while power > 0:
+            if power % 2 == 1:
+                res *= current
+            current *= current
+            power //= 2
 
-        if n < 0:
-            x = 1 / x
-            n = -n
-
-        return recur(n)
+        return res if n >= 0 else 1 / res
